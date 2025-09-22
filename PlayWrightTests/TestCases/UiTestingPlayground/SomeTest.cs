@@ -63,5 +63,21 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
             Console.WriteLine($"NotDisplayedBtn is visible: {await visibilityPage.NotDisplayedBtn.IsVisibleAsync()}");
             Console.WriteLine($"OffScreenBtn    is visible: {await visibilityPage.OffScreenBtn.IsVisibleAsync()}");
         }
+
+        [Test]
+        public async Task FileUpload()
+        {
+            await Page.GotoAsync("http://uitestingplayground.com/upload");
+
+            await Task.Delay(5000);
+
+            var fileChooserTask = Page.WaitForFileChooserAsync();
+            await Page.FrameLocator("//*[@src='/static/upload.html']").Locator("label.browse-btn").ClickAsync();
+            var fileChooser = await fileChooserTask;
+            await fileChooser.SetFilesAsync(@"e:\temp\file.txt");
+
+
+            await Task.Delay(5000);
+        }
     }
 }

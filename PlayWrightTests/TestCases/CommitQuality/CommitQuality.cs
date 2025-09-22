@@ -22,5 +22,19 @@ namespace PlayWrightTests.TestCases.CommitQuality
             await Task.Delay(6000);
             await Page.GetByTestId("accordion-1").ClickAsync(new() { Timeout = 2000 });
         }
+
+        [Test]
+        public async Task FileUpload()
+        {
+            await Page.GotoAsync("https://commitquality.com/practice-file-upload");
+            await Page.GetByTestId("file-input").SetInputFilesAsync("e:\\temp\\file.txt");
+
+            Page.Dialog += async (_, dialog) => 
+            {
+                await dialog.AcceptAsync();
+            };
+
+            await Page.GetByText("Submit").ClickAsync();
+        }
     }
 }
