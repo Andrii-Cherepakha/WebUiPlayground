@@ -18,13 +18,13 @@ namespace SeleniumTests.Core
                 if (stopwatch.Elapsed > WaitForElementTimeout && elements.Count == 0)
                     throw new NoSuchElementException($"Locator: {locator}");
 
-                Thread.Sleep(WaitInterval);
+                Thread.Sleep(SleepInterval);
             }
 
             return elements;
         }
 
         private static readonly TimeSpan WaitForElementTimeout = TimeSpan.FromSeconds(15);
-        private static readonly TimeSpan WaitInterval = TimeSpan.FromMilliseconds(500);
+        private static readonly TimeSpan SleepInterval = TimeSpan.FromMilliseconds(500);
     }
 }

@@ -11,6 +11,6 @@ namespace SeleniumTests.Core
 
         public void OpenPage(Uri url) => driver.Navigate().GoToUrl(url);
 
-        public void OpenBasePage() => OpenPage(baseUrl);
+        public void OpenMainPage() => OpenPage(baseUrl);
     }
 }

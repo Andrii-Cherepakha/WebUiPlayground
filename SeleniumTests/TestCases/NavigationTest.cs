@@ -9,7 +9,7 @@ namespace SeleniumTests.TestCases
         [Test]
         public void StartBrowserTest()
         {
-            Navigation.OpenBasePage();
+            Navigation.OpenMainPage();
         }
     }
 }
