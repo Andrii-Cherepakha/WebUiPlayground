@@ -4,8 +4,13 @@ namespace SeleniumTests.PageObjects
 {
     public class HomePage : PageObject
     {
-        public HomePage(ISearchContext search) : base(search)
+        public HomePage(IWebDriver driver) : base(driver)
         {
+        }
+
+        public void Navigate()
+        {
+            Driver?.Navigate().GoToUrl("http://uitestingplayground.com/"); // TODO move to config
         }
 
         public void OpenSection(string name)

@@ -6,9 +6,6 @@ namespace SeleniumTests.TestCases
 {
     public abstract class BaseTest
     {
-        private protected Navigation Navigation => navigation ?? (navigation = new Navigation(selenium.Driver));
-
-        private Navigation navigation;
         private readonly Selenium selenium = new Selenium();
 
         [OneTimeTearDown]

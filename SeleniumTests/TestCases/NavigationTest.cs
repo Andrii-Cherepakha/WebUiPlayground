@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using SeleniumTests.Core;
+using SeleniumTests.PageObjects;
 
 namespace SeleniumTests.TestCases
 {
@@ -9,7 +9,8 @@ namespace SeleniumTests.TestCases
         [Test]
         public void StartBrowserTest()
         {
-            Navigation.OpenMainPage();
+            var homePage = GetPage<HomePage>();
+            homePage.Navigate();
         }
     }
 }

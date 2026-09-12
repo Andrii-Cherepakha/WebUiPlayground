@@ -5,9 +5,10 @@ namespace SeleniumTests.PageObjects
 {
     public class VisibilityPage : PageObject
     {
-        public VisibilityPage(ISearchContext search) : base(search)
+        public VisibilityPage(IWebDriver driver) : base(driver)
         {
         }
+
 
         public IWebElement HideBtn => Context.GetElement(By.Id("hideButton"));
         public IWebElement RemovedBtn => Context.GetElement(By.Id("removedButton"));

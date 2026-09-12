@@ -9,9 +9,9 @@ namespace SeleniumTests.TestCases
         [Test]
         public void VisibilityTest()
         {
-            Navigation.OpenMainPage();
-
             var homePage = GetPage<HomePage>();
+            homePage.Navigate();
+
             homePage.OpenSection("Visibility");
 
             var visibilityPage = GetPage<VisibilityPage>();
