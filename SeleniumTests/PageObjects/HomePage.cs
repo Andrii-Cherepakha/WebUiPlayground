@@ -8,7 +8,7 @@ namespace SeleniumTests.PageObjects
         {
         }
 
-        public void Navigate()
+        public void Open()
         {
             Driver?.Navigate().GoToUrl("http://uitestingplayground.com/"); // TODO move to config
         }

@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 
 namespace PlayWrightTests.PageObjects
 {
@@ -10,10 +9,5 @@ namespace PlayWrightTests.PageObjects
         {
             Page = page;
         }
-
-        protected ILocator GetButton(string text) => Page.GetByRole(AriaRole.Button, new()
-        {
-            NameRegex = new Regex(text, RegexOptions.IgnoreCase)
-        });
     }
 }

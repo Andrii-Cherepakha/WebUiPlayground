@@ -16,6 +16,7 @@ namespace PlayWrightTests.PageObjects.UiTestingPlayground
         public async Task OpenSectionAsync(string section)
         {
             await Page.GetByRole(AriaRole.Link).Filter(new() { HasText = section }).ClickAsync();
+            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
         }
 
     }

@@ -8,14 +8,14 @@ namespace PlayWrightTests.PageObjects.UiTestingPlayground
         {
         }
 
-        public ILocator HideBtn => GetButton("Hide"); //Page.Locator("id=hideButton");
-        public ILocator RemovedBtn => GetButton("Removed"); //Page.Locator("id=removedButton");
-        public ILocator ZeroWidthBtn => GetButton("Zero Width"); //Page.Locator("id=zeroWidthButton");
-        public ILocator OverlappedBtn => GetButton("Overlapped"); //Page.Locator("id=overlappedButton");
-        public ILocator TransparentBtn => GetButton("Opacity 0"); //Page.Locator("id=transparentButton");
-        public ILocator InvisibleBtn => GetButton("Visibility Hidden"); //Page.Locator("id=invisibleButton");
-        public ILocator NotDisplayedBtn => GetButton("Display None"); //Page.Locator("id=notdisplayedButton");
-        public ILocator OffScreenBtn => GetButton("Offscreen"); //Page.Locator("id=offscreenButton");
+        public ILocator HideBtn => Page.Locator("#hideButton");
+        public ILocator RemovedBtn => Page.Locator("#removedButton");
+        public ILocator ZeroWidthBtn => Page.Locator("#zeroWidthButton");
+        public ILocator OverlappedBtn => Page.Locator("#overlappedButton");
+        public ILocator TransparentBtn => Page.Locator("#transparentButton");
+        public ILocator InvisibleBtn => Page.Locator("#invisibleButton");
+        public ILocator NotDisplayedBtn => Page.Locator("#notdisplayedButton");
+        public ILocator OffScreenBtn => Page.Locator("#offscreenButton");
 
     }
 }

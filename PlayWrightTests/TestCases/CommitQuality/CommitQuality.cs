@@ -27,7 +27,7 @@ namespace PlayWrightTests.TestCases.CommitQuality
         public async Task FileUpload()
         {
             await Page.GotoAsync("https://commitquality.com/practice-file-upload");
-            await Page.GetByTestId("file-input").SetInputFilesAsync("e:\\temp\\file.txt");
+            await Page.GetByTestId("file-input").SetInputFilesAsync(@"d:\temp\file.txt");
 
             Page.Dialog += async (_, dialog) => 
             {

@@ -24,7 +24,7 @@ namespace SeleniumTests.Core
             return elements;
         }
 
-        private static readonly TimeSpan WaitForElementTimeout = TimeSpan.FromSeconds(15);
+        private static readonly TimeSpan WaitForElementTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan SleepInterval = TimeSpan.FromMilliseconds(500);
     }
 }

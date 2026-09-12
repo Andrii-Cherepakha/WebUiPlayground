@@ -1,0 +1,83 @@
+﻿using NUnit.Framework;
+using PlayWrightTests.PageObjects.UiTestingPlayground;
+
+namespace PlayWrightTests.TestCases.UiTestingPlayground
+{
+    [Parallelizable(ParallelScope.Self)]
+    [TestFixture]
+    public class ElementInteractionTest : BaseTest
+    {
+        [Test]
+        public async Task VisibilityTest()
+        {
+            var homePage = GetPage<HomePage>();
+            await homePage.OpenAsync();
+
+            await homePage.OpenSectionAsync("Visibility");
+
+            var visibilityPage = GetPage<VisibilityPage>();
+
+            Console.WriteLine("\nBEFORE HIDE: ");
+
+            Console.WriteLine($"Removed           is visible: {await visibilityPage.RemovedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Zero Width        is visible: {await visibilityPage.ZeroWidthBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Overlapped        is visible: {await visibilityPage.OverlappedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Opacity 0         is visible: {await visibilityPage.TransparentBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Visibility Hidden is visible: {await visibilityPage.InvisibleBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Not Displayed     is visible: {await visibilityPage.NotDisplayedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Off Screen        is visible: {await visibilityPage.OffScreenBtn.IsVisibleAsync()}");
+
+            await visibilityPage.HideBtn.ClickAsync();
+
+            Console.WriteLine("\nAFTER HIDE: ");
+
+            Console.WriteLine($"Removed           is visible: {await visibilityPage.RemovedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Zero Width        is visible: {await visibilityPage.ZeroWidthBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Overlapped        is visible: {await visibilityPage.OverlappedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Opacity 0         is visible: {await visibilityPage.TransparentBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Visibility Hidden is visible: {await visibilityPage.InvisibleBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Not Displayed     is visible: {await visibilityPage.NotDisplayedBtn.IsVisibleAsync()}");
+            Console.WriteLine($"Off Screen        is visible: {await visibilityPage.OffScreenBtn.IsVisibleAsync()}");
+        }
+
+        [Test]
+        public async Task TextInputTest()
+        {
+            string? text = "I'm learning Playwright.";
+
+            var environment = Environment.GetEnvironmentVariable("ENVIRONMENT");
+            Console.WriteLine(environment);
+
+            var homePage = GetPage<HomePage>();
+
+            await homePage.OpenAsync();
+            await homePage.OpenSectionAsync("Text Input");
+
+            await Expect(Page).ToHaveTitleAsync("Text Input");
+
+            var textInputPage = GetPage<TextInputPage>();
+
+            await textInputPage.Input.FillAsync(text);
+            await textInputPage.UpdatingButton.ClickAsync();
+
+            await Expect(textInputPage.UpdatingButton).ToHaveTextAsync(text);
+            await Expect(textInputPage.UpdatingButton).Not.ToHaveTextAsync("Some other text.");
+        }
+
+        [Test]
+        public async Task FileUpload()
+        {
+            await Page.GotoAsync("http://uitestingplayground.com/upload");
+
+            await Task.Delay(5000);
+
+            var fileChooserTask = Page.WaitForFileChooserAsync();
+            await Page.FrameLocator("//*[@src='/static/upload.html']").Locator("label.browse-btn").ClickAsync();
+            var fileChooser = await fileChooserTask;
+            await fileChooser.SetFilesAsync(@"d:\temp\file.txt");
+
+
+            await Task.Delay(5000);
+        }
+    }
+}
