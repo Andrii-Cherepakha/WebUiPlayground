@@ -41,27 +41,29 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
         }
 
         [Test]
-        public async Task TextInputTest()
+        public async Task InputTextIntoTheOverlappedElement()
         {
-            string? text = "I'm learning Playwright.";
-
-            var environment = Environment.GetEnvironmentVariable("ENVIRONMENT");
-            Console.WriteLine(environment);
-
             var homePage = GetPage<HomePage>();
-
             await homePage.OpenAsync();
-            await homePage.OpenSectionAsync("Text Input");
 
-            await Expect(Page).ToHaveTitleAsync("Text Input");
+            await homePage.OpenSectionAsync("Overlapped Element");
 
-            var textInputPage = GetPage<TextInputPage>();
+            var overlappedElementPage = GetPage<OverlappedElementPage>();
 
-            await textInputPage.Input.FillAsync(text);
-            await textInputPage.UpdatingButton.ClickAsync();
+            const string ID = "ID-001";
+            const string NAME = "John Doe";
+            const string SUBJECT = "Test Subject";
 
-            await Expect(textInputPage.UpdatingButton).ToHaveTextAsync(text);
-            await Expect(textInputPage.UpdatingButton).Not.ToHaveTextAsync("Some other text.");
+            await overlappedElementPage.IdTextBox.FillAsync(ID); // no overlapped, no scroll needed
+
+            await overlappedElementPage.NameTextBox.EvaluateAsync("element => element.scrollIntoView(true);");
+            await overlappedElementPage.NameTextBox.FillAsync(NAME); // partialy overlapped, scroll needed
+
+            await overlappedElementPage.SubjectTextBox.FillAsync(SUBJECT); // completly overlapped, no scroll needed
+
+            Assert.That(overlappedElementPage.IdTextBox.InputValueAsync().Result, Is.EqualTo(ID));
+            Assert.That(overlappedElementPage.NameTextBox.InputValueAsync().Result, Is.EqualTo(NAME));
+            Assert.That(overlappedElementPage.SubjectTextBox.InputValueAsync().Result, Is.EqualTo(SUBJECT));
         }
 
         [Test]

@@ -9,7 +9,6 @@ namespace SeleniumTests.PageObjects
         {
         }
 
-
         public IWebElement HideBtn => Context.GetElement(By.Id("hideButton"));
         public IWebElement RemovedBtn => Context.GetElement(By.Id("removedButton"));
         public IWebElement ZeroWidthBtn => Context.GetElement(By.Id("zeroWidthButton"));

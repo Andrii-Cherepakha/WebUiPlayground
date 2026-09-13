@@ -15,5 +15,7 @@ namespace SeleniumTests.TestCases
         }
 
         protected T? GetPage<T>() where T : PageObject => Activator.CreateInstance(typeof(T), selenium.Driver) as T;
+
+        protected JsExecutor JsExecutor => new JsExecutor(selenium.Driver);
     }
 }

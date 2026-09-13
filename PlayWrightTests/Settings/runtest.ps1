@@ -6,6 +6,6 @@
 # $env:HEADED="1"
 # $env:BROWSER="webkit"
 
-dotnet test --filter "PlayWrightTests.SomeTest"
+#dotnet test --filter "PlayWrightTests.SomeTest"
 
-dotnet test --filter "PlayWrightTests.SomeTest" --settings:Settings\chrome.runsettings
+dotnet test --filter "ElementInteractionTest.OverlappedElement" --settings:Settings\chrome.runsettings
