@@ -67,6 +67,45 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
         }
 
         [Test]
+        public async Task ClickTest()        
+        {
+            var homePage = GetPage<HomePage>();
+            await homePage.OpenAsync();
+            await homePage.OpenSectionAsync("Click");
+
+            var clickPage = GetPage<ClickPage>();
+
+            await clickPage.Btn.ClickAsync();
+
+            var classAttribute = await clickPage.Btn.GetAttributeAsync("class");
+            Assert.That(classAttribute, Does.Contain("btn-success"));
+
+            await homePage.OpenAsync();
+            await homePage.OpenSectionAsync("Scroll to Click");
+
+            var scrollToClickPage = GetPage<ScrollToClickPage>();
+
+            await scrollToClickPage.Btn1.ClickAsync();
+            await scrollToClickPage.Btn2.ClickAsync();
+            await scrollToClickPage.Btn3.ClickAsync();
+            await scrollToClickPage.HoverRow4.HoverAsync();
+            await scrollToClickPage.Btn4.ClickAsync();
+
+            Assert.That(await scrollToClickPage.ProgressText.TextContentAsync(), Is.EqualTo("All buttons clicked!"));
+
+            await homePage.OpenAsync();
+            await homePage.OpenSectionAsync("Mouse Over");
+
+            var mouseOverPage = GetPage<MouseOverPage>();
+
+            await mouseOverPage.ClickMeBtn.ClickAsync();
+            await mouseOverPage.LinkBtn.ClickAsync();
+
+            Assert.That(await mouseOverPage.ClickMeCount.TextContentAsync(), Is.EqualTo("1"));
+            Assert.That(await mouseOverPage.LinkCount.TextContentAsync(), Is.EqualTo("1"));
+        }
+
+        [Test]
         public async Task FileUpload()
         {
             await Page.GotoAsync("http://uitestingplayground.com/upload");

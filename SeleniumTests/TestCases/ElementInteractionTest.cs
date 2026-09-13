@@ -1,6 +1,5 @@
 ﻿
 using NUnit.Framework;
-using SeleniumTests.Core;
 using SeleniumTests.PageObjects;
 
 namespace SeleniumTests.TestCases
@@ -58,6 +57,7 @@ namespace SeleniumTests.TestCases
             overlappedElementPage.IdTextBox.SendKeys(ID); // no overlapped, no scroll needed
 
             JsExecutor.ScrollToElement(overlappedElementPage.NameTextBox);
+            //Action.ScrollToElement(overlappedElementPage.NameTextBox); // does not help
             overlappedElementPage.NameTextBox.SendKeys(NAME); // partialy overlapped, scroll needed
 
             overlappedElementPage.SubjectTextBox.SendKeys(SUBJECT); // completly overlapped, no scroll needed
@@ -65,6 +65,44 @@ namespace SeleniumTests.TestCases
             Assert.That(overlappedElementPage.IdTextBox.GetAttribute("value"), Is.EqualTo(ID));
             Assert.That(overlappedElementPage.NameTextBox.GetAttribute("value"), Is.EqualTo(NAME));
             Assert.That(overlappedElementPage.SubjectTextBox.GetAttribute("value"), Is.EqualTo(SUBJECT));
+        }
+
+        [Test]
+        public void ClickTest()
+        {
+            var homePage = GetPage<HomePage>();
+            homePage.Open();
+            homePage.OpenSection("Click");
+
+            var clickPage = GetPage<ClickPage>();
+
+            clickPage.Btn.Click();
+
+            Assert.That(clickPage.Btn.GetAttribute("class"), Contains.Substring("btn-success"));
+
+            homePage.Open();
+            homePage.OpenSection("Scroll to Click");
+
+            var scrollToClickPage = GetPage<ScrollToClickPage>();
+
+            scrollToClickPage.Btn1.Click();
+            scrollToClickPage.Btn2.Click();
+            scrollToClickPage.Btn3.Click();
+            Action.MoveToElement(scrollToClickPage.HoverRow4);
+            scrollToClickPage.Btn4.Click();
+
+            Assert.That(scrollToClickPage.ProgressText.Text, Is.EqualTo("All buttons clicked!"));
+
+            homePage.Open();
+            homePage.OpenSection("Mouse Over");
+
+            var mouseOverPage = GetPage<MouseOverPage>();
+
+            mouseOverPage.ClickMeBtn.Click();
+            mouseOverPage.LinkBtn.Click();
+
+            Assert.That(mouseOverPage.ClickMeCount.Text, Is.EqualTo("1"));
+            Assert.That(mouseOverPage.LinkCount.Text, Is.EqualTo("1"));
         }
     }
 }
