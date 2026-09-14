@@ -4,7 +4,7 @@ using SeleniumTests.PageObjects;
 
 namespace SeleniumTests.TestCases
 {
-    public class ElementInteractionTest : BaseTest
+    public class ElementInteractionTests : BaseTest
     {
         [Test]
         public void VisibilityTest()
