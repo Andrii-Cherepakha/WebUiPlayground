@@ -7,34 +7,54 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
     [TestFixture]
     public class SelectTests : BaseTest
     {
+        private SelectPage selectPage;
+
+        [SetUp]
+        public async Task SetUp()
+        {
+            var homePage = GetPage<HomePage>();
+            await homePage.OpenAsync();
+            await homePage.OpenSectionAsync("Select");
+
+            selectPage = GetPage<SelectPage>();
+        }
+
         [Test]
         public async Task SelectLanguageTest()
         {
-            // TODO: implement test for SelectLanguage
+            await selectPage.Language.SelectOptionAsync(new[] { "cs" });
+            Assert.That(await selectPage.StatusLanguage.TextContentAsync(), Is.EqualTo("Selected: C# (value: cs)"));
         }
 
         [Test]
         public async Task SelectCityTest()
         {
-            // TODO: implement test for SelectCity
+            await selectPage.City.SelectOptionAsync(new[] { "la" });
+            Assert.That(await selectPage.StatusCity.TextContentAsync(), Is.EqualTo("Selected: Los Angeles (value: la)")); // <-- &nbsp; special character in the text
         }
 
         [Test]
         public async Task SelectProductTest()
         {
-            // TODO: implement test for SelectProduct
+            await selectPage.ProductVersion.SelectOptionAsync(new[] { "v3.0" });
+            Assert.That(await selectPage.StatusProduct.TextContentAsync(), Is.EqualTo("Selected: Release 3.0 (value: v3.0)"));
         }
 
         [Test]
         public async Task SelectColorsTest()
         {
-            // TODO: implement test for SelectColors (multiple)
+            await selectPage.Colors.SelectOptionAsync(new[] { "Orange", "Green", "Purple" });
+            // Deselect Orange by selecting only Green and Purple
+            await selectPage.Colors.SelectOptionAsync(new[] { "Green", "Purple" });
+            Assert.That(await selectPage.StatusColors.TextContentAsync(), Is.EqualTo("Selected: Green, Purple"));
         }
 
         [Test]
         public async Task SelectFruitsTest()
         {
-            // TODO: implement test for SelectFruits (multiple)
+            Assert.That(await selectPage.StatusFruits.TextContentAsync(), Is.Not.Null.And.Not.Empty);
+            await selectPage.Fruits.SelectOptionAsync(new[] { "Elderberry" });
+            Assert.That(await selectPage.StatusFruits.TextContentAsync(), Does.Contain("Elderberry"));
         }
     }
 }

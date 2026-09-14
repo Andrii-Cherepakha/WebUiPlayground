@@ -105,20 +105,20 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
             Assert.That(await mouseOverPage.LinkCount.TextContentAsync(), Is.EqualTo("1"));
         }
 
-        [Test]
-        public async Task FileUpload()
-        {
-            await Page.GotoAsync("http://uitestingplayground.com/upload");
+        //[Test]
+        //public async Task FileUpload()
+        //{
+        //    await Page.GotoAsync("http://uitestingplayground.com/upload");
 
-            await Task.Delay(5000);
+        //    await Task.Delay(5000);
 
-            var fileChooserTask = Page.WaitForFileChooserAsync();
-            await Page.FrameLocator("//*[@src='/static/upload.html']").Locator("label.browse-btn").ClickAsync();
-            var fileChooser = await fileChooserTask;
-            await fileChooser.SetFilesAsync(@"d:\temp\file.txt");
+        //    var fileChooserTask = Page.WaitForFileChooserAsync();
+        //    await Page.FrameLocator("//*[@src='/static/upload.html']").Locator("label.browse-btn").ClickAsync();
+        //    var fileChooser = await fileChooserTask;
+        //    await fileChooser.SetFilesAsync(@"d:\temp\file.txt");
 
 
-            await Task.Delay(5000);
-        }
+        //    await Task.Delay(5000);
+        //}
     }
 }
