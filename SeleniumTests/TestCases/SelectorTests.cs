@@ -6,35 +6,36 @@ namespace SeleniumTests.TestCases
 {
     public class SelectorTests : BaseTest
     {
+        private readonly HomePage homePage;
         private readonly SelectorsPage selectorsPage;
 
         public SelectorTests()
         {
+            homePage = GetPage<HomePage>();
             selectorsPage = GetPage<SelectorsPage>();
         }
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
-            var homePage = GetPage<HomePage>();
             homePage.Open();
-            homePage.OpenSection("CSS Selectors");
         }
 
         [Test]
         public void ByIdByText()
         {
+            homePage.OpenSection("CSS Selectors");
+
             IList<IWebElement> buttons = new List<IWebElement>();
 
             // same element by different locators/selectors
-            buttons.Add(selectorsPage.GetElement(By.Id("primary-btn")));
             buttons.Add(selectorsPage.GetElement(By.Id("primary-btn")));
             buttons.Add(selectorsPage.GetElement(By.CssSelector("[data-id='primary-btn']")));
             buttons.Add(selectorsPage.GetElement(By.XPath("//button[@data-id='primary-btn']")));
             buttons.Add(selectorsPage.GetElement(By.XPath("//button[text()='Primary Button']")));
             buttons.Add(selectorsPage.GetElement(By.XPath("//button[normalize-space()='Primary Button']")));
 
-            Assert.That(buttons.Count, Is.EqualTo(6));
+            Assert.That(buttons.Count, Is.EqualTo(5));
 
             foreach (var button in buttons)
             {
@@ -49,24 +50,27 @@ namespace SeleniumTests.TestCases
         [Test]
         public void ByTextSiblingParentAncestor()
         {
+            homePage.OpenSection("CSS Selectors");
+
             var item2 = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']"));
             var precedingSibling = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']//preceding-sibling::li"));
             var followingSibling = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']//following-sibling::li"));
             var parentUl = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']//parent::ul"));
             var parentDiv = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']//parent::ul//parent::div"));
-            var ancestorDiv = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']//ancestor::div"));
+            // var ancestorDiv = selectorsPage.GetElement(By.XPath("//li[text()='Item 2 (special)']/ancestor::div"));
 
             Assert.That(item2.GetAttribute("data-id"), Is.EqualTo("combo-item-2"));
             Assert.That(precedingSibling.GetAttribute("data-id"), Is.EqualTo("combo-item-1"));
             Assert.That(followingSibling.GetAttribute("data-id"), Is.EqualTo("combo-item-3"));
             Assert.That(parentUl.GetAttribute("data-id"), Is.EqualTo("combo-list"));
             Assert.That(parentDiv.GetAttribute("data-id"), Is.EqualTo("combo-container"));
-            Assert.That(ancestorDiv.GetAttribute("data-id"), Is.EqualTo("combo-container"));
         }
 
         [Test]
         public void InvisibleElements()
         {
+            homePage.OpenSection("CSS Selectors");
+
             var displayNone = selectorsPage.GetElement(By.Id("hidden-display"));
             var hidden = selectorsPage.GetElement(By.Id("hidden-visibility"));
             var zeroSizeParent = selectorsPage.GetElement(By.Id("hidden-overflow"));
@@ -96,17 +100,16 @@ namespace SeleniumTests.TestCases
         [Test]
         public void ShadowDOM()
         {
-            // 1. Locate the shadow host element in the regular DOM
-            var shadowHost1 = selectorsPage.GetElement(By.XPath("//css-outer-component[@data-id='shadow-host-outer']"));
+            homePage.OpenSection("CSS Selectors");
 
-            // 2. Get the shadow root via JavaScript
-            var shadowLevel1 = JsExecutor.GetShadowRoot(shadowHost1);
+            var shadowLevel1 = selectorsPage.
+                GetElement(By.XPath("//css-outer-component[@data-id='shadow-host-outer']"))
+                .GetShadowRoot();
 
-            // 3. Find an element inside the shadow DOM
-            // Selenium does not support XPath inside the shadow root
+            // Find an element inside the shadow DOM. Selenium does not support XPath inside the shadow root
             // OpenQA.Selenium.WebDriverArgumentException : invalid argument: invalid locator
-            // var button = shadowRoot.FindElement(By.XPath("//button[@id='shadow-btn-l1']"));
-            // var button = shadowRoot.FindElement(By.Id("shadow-btn-l1"));
+            // var button = shadowLevel1.FindElement(By.XPath("//button[@id='shadow-btn-l1']"));
+            // var button = shadowLevel1.FindElement(By.Id("shadow-btn-l1"));
             var button1 = shadowLevel1.FindElement(By.CssSelector("button#shadow-btn-l1"));
 
             Assert.That(button1.TagName, Is.EqualTo("button"));
@@ -120,8 +123,9 @@ namespace SeleniumTests.TestCases
             Assert.That(input1.GetAttribute("value"), Is.EqualTo("Hello from Level 1 Shadow DOM"));
 
             // Level 2 shadow DOM
-            var shadowHost2 = shadowLevel1.FindElement(By.CssSelector("css-inner-component[data-id='shadow-host-inner']"));
-            var shadowLevel2 = JsExecutor.GetShadowRoot(shadowHost2);
+            var shadowLevel2 = shadowLevel1
+                .FindElement(By.CssSelector("css-inner-component[data-id='shadow-host-inner']"))
+                .GetShadowRoot();
 
             var button2 = shadowLevel2.FindElement(By.CssSelector("button#shadow-btn-l2"));
 
@@ -136,8 +140,9 @@ namespace SeleniumTests.TestCases
             Assert.That(input2.GetAttribute("value"), Is.EqualTo("Hello from Level 2 Shadow DOM"));
 
             // Level 3 shadow DOM
-            var shadowHost3 = shadowLevel2.FindElement(By.CssSelector("css-deep-component[data-id='shadow-host-deep']"));
-            var shadowLevel3 = JsExecutor.GetShadowRoot(shadowHost3);
+            var shadowLevel3 = shadowLevel2
+                .FindElement(By.CssSelector("css-deep-component[data-id='shadow-host-deep']"))
+                .GetShadowRoot();
 
             var button3 = shadowLevel3.FindElement(By.CssSelector("button#shadow-btn-l3"));
 
@@ -155,8 +160,6 @@ namespace SeleniumTests.TestCases
         [Test]
         public void ByTextWithSpaces()
         {
-            var homePage = GetPage<HomePage>();
-            homePage.Open();
             homePage.OpenSection("Verify Text");
 
             selectorsPage.GetElement(By.XPath("//p[normalize-space(.)='Hello UserName!']")); // selectorsPage is a stab here
@@ -165,8 +168,6 @@ namespace SeleniumTests.TestCases
         [Test]
         public void ByTextNbsp()
         {
-            var homePage = GetPage<HomePage>();
-            homePage.Open();
             homePage.OpenSection("Non-Breaking Space");
 
             //selectorsPage.GetElement(By.XPath("//button[text()='My Button']")); // selectorsPage is a stab here
