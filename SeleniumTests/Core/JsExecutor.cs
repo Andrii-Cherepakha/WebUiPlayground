@@ -15,5 +15,10 @@ namespace SeleniumTests.Core
         {
             executor.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
+
+        public ShadowRoot GetShadowRoot(IWebElement shadowHost)
+        {
+            return (ShadowRoot)executor.ExecuteScript("return arguments[0].shadowRoot", shadowHost);
+        }
     }
 }
