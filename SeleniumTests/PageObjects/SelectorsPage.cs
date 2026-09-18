@@ -32,52 +32,70 @@ namespace SeleniumTests.PageObjects
 
         // Shadow DOM
 
-        // aliases to avoid chaining ShadowLevel1.ShadowLevel2.ShadowLevel3.Button and ShadowLevel1.ShadowLevel2.ShadowLevel3.Input
+        // aliases to avoid chaining in the test
         public IWebElement ButtonLevel1 => ShadowLevel1.Button;
         public IWebElement InputLevel1 => ShadowLevel1.Input;
-        public IWebElement ButtonLevel2 => ShadowLevel1.ShadowLevel2.Button;
-        public IWebElement InputLevel2 => ShadowLevel1.ShadowLevel2.Input;
-        public IWebElement ButtonLevel3 => ShadowLevel1.ShadowLevel2.ShadowLevel3.Button;
-        public IWebElement InputLevel3 => ShadowLevel1.ShadowLevel2.ShadowLevel3.Input;
-
-
-        private ShadowDOMLevel1 ShadowLevel1 =>
-            new ShadowDOMLevel1(Context
-                .GetElement(By.CssSelector("css-outer-component[data-id='shadow-host-outer']"))
-                .GetShadowRoot());
+        public IWebElement ButtonLevel2 => ShadowLevel1.NestedLevel?.Button;
+        public IWebElement InputLevel2 => ShadowLevel1.NestedLevel?.Input;
+        public IWebElement ButtonLevel3 => ShadowLevel1.NestedLevel?.NestedLevel?.Button;
+        public IWebElement InputLevel3 => ShadowLevel1.NestedLevel?.NestedLevel?.Input;
 
         // Note: Selenium does not support XPath inside the shadow root
+        private ShadowLevel ShadowLevel1 => new ShadowLevel(Context
+                .GetElement(By.CssSelector("css-outer-component[data-id='shadow-host-outer']"))
+                .GetShadowRoot(), Level1Config);
 
-        private class ShadowDOMLevel1 : PageObject
+        #region Shadow DOM classes
+
+        private sealed class ShadowLevelConfig
         {
-            public ShadowDOMLevel1(ISearchContext shadowRoot) : base(shadowRoot) { }
-
-            public IWebElement Button => Context.GetElement(By.CssSelector($"button#shadow-btn-l1"));
-            public IWebElement Input => Context.GetElement(By.CssSelector($"input#shadow-input-l1"));
-
-            public ShadowDOMLevel2 ShadowLevel2 => new ShadowDOMLevel2(Context
-                .GetElement(By.CssSelector("css-inner-component[data-id='shadow-host-inner']"))
-                .GetShadowRoot());
+            public int Level { get; init; }
+            public By? NestedLevelSelector { get; init; }
+            public Func<ISearchContext, ShadowLevel>? NestedLevelFactory { get; init; }
         }
 
-        private class ShadowDOMLevel2 : PageObject
+        private sealed class ShadowLevel : PageObject
         {
-            public ShadowDOMLevel2(ISearchContext shadowRoot) : base(shadowRoot) { }
+            private readonly ShadowLevelConfig _config;
 
-            public IWebElement Button => Context.GetElement(By.CssSelector($"button#shadow-btn-l2"));
-            public IWebElement Input => Context.GetElement(By.CssSelector($"input#shadow-input-l2"));
+            public ShadowLevel(ISearchContext shadowRoot, ShadowLevelConfig config) : base(shadowRoot)
+            {
+                _config = config;
+            }
 
-            public ShadowDOMLevel3 ShadowLevel3 => new ShadowDOMLevel3(Context
-                .GetElement(By.CssSelector("css-deep-component[data-id='shadow-host-deep']"))
-                .GetShadowRoot());
+            public IWebElement Button => Context.GetElement(By.CssSelector($"button#shadow-btn-l{_config.Level}"));
+
+            public IWebElement Input => Context.GetElement(By.CssSelector($"input#shadow-input-l{_config.Level}"));
+
+            public ShadowLevel? NestedLevel =>
+                _config.NestedLevelFactory == null || _config.NestedLevelSelector == null
+                    ? null
+                    : _config.NestedLevelFactory(Context.GetElement(_config.NestedLevelSelector).GetShadowRoot());
+
+            public int Level => _config.Level;
         }
 
-        private class ShadowDOMLevel3 : PageObject
+        private static readonly ShadowLevelConfig Level3Config = new()
         {
-            public ShadowDOMLevel3(ISearchContext shadowRoot) : base(shadowRoot) { }
+            Level = 3,
+            NestedLevelSelector = null,
+            NestedLevelFactory = null
+        };
 
-            public IWebElement Button => Context.GetElement(By.CssSelector($"button#shadow-btn-l3"));
-            public IWebElement Input => Context.GetElement(By.CssSelector($"input#shadow-input-l3"));
-        }
+        private static readonly ShadowLevelConfig Level2Config = new()
+        {
+            Level = 2,
+            NestedLevelSelector = By.CssSelector("css-deep-component[data-id='shadow-host-deep']"),
+            NestedLevelFactory = root => new ShadowLevel(root, Level3Config)
+        };
+
+        private static readonly ShadowLevelConfig Level1Config = new()
+        {
+            Level = 1,
+            NestedLevelSelector = By.CssSelector("css-inner-component[data-id='shadow-host-inner']"),
+            NestedLevelFactory = root => new ShadowLevel(root, Level2Config)
+        };
+
+        #endregion
     }
 }
