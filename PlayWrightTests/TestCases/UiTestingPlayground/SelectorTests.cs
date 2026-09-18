@@ -118,5 +118,25 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
             await selectorsPage.InputLevel3.FillAsync("Hello from Level 3 Shadow DOM");
             Assert.That(await selectorsPage.InputLevel3.InputValueAsync(), Is.EqualTo("Hello from Level 3 Shadow DOM"));
         }
+
+        [Test]
+        public async Task ByTextWithSpaces()
+        {
+            await homePage.OpenSectionAsync("Verify Text");
+
+            var verifyTextPage = GetPage<VerifyTextPage>();
+
+            Assert.That(await verifyTextPage.TextElementHello.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("SPAN"));
+            Assert.That(await verifyTextPage.TextElementHello.InnerTextAsync(), Is.EqualTo("Hello UserName!"));
+
+            Assert.That(await verifyTextPage.TextElementWelcome.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("SPAN"));
+            Assert.That(await verifyTextPage.TextElementWelcome.InnerTextAsync(), Is.EqualTo("Welcome UserName!"));
+
+            //Assert.That(await verifyTextPage.TextElementHelloByText.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("SPAN"));
+            //Assert.That(await verifyTextPage.TextElementHelloByText.InnerTextAsync(), Is.EqualTo("Hello UserName!"));
+
+            Assert.That(await verifyTextPage.TextElementWelcomeByText.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("SPAN"));
+            Assert.That(await verifyTextPage.TextElementWelcomeByText.InnerTextAsync(), Is.EqualTo("Welcome UserName!"));
+        }
     }
 }
