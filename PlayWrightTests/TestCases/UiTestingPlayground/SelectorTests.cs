@@ -84,5 +84,39 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
             Assert.That(await selectorsPage.HiddenZeroOpacity.TextContentAsync(), Is.EqualTo("Hidden via opacity:0"));
             Assert.That(await selectorsPage.HiddenOffScreen.TextContentAsync(), Is.EqualTo("Hidden via offscreen position"));
         }
+
+        [Test]
+        public async Task ShadowDOM()
+        {
+            await homePage.OpenSectionAsync("CSS Selectors");
+            var selectorsPage = GetPage<SelectorsPage>();
+
+            Assert.That(await selectorsPage.ButtonLevel1.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await selectorsPage.ButtonLevel1.GetAttributeAsync("id"), Is.EqualTo("shadow-btn-l1"));
+            Assert.That(await selectorsPage.ButtonLevel1.GetAttributeAsync("data-level"), Is.EqualTo("1"));
+            Assert.That(await selectorsPage.ButtonLevel1.GetAttributeAsync("data-id"), Is.EqualTo("shadow-l1-btn"));
+            Assert.That(await selectorsPage.ButtonLevel1.TextContentAsync(), Is.EqualTo("Level 1 Button"));
+
+            await selectorsPage.InputLevel1.FillAsync("Hello from Level 1 Shadow DOM");
+            Assert.That(await selectorsPage.InputLevel1.InputValueAsync(), Is.EqualTo("Hello from Level 1 Shadow DOM"));
+
+            Assert.That(await selectorsPage.ButtonLevel2.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await selectorsPage.ButtonLevel2.GetAttributeAsync("id"), Is.EqualTo("shadow-btn-l2"));
+            Assert.That(await selectorsPage.ButtonLevel2.GetAttributeAsync("data-level"), Is.EqualTo("2"));
+            Assert.That(await selectorsPage.ButtonLevel2.GetAttributeAsync("data-id"), Is.EqualTo("shadow-l2-btn"));
+            Assert.That(await selectorsPage.ButtonLevel2.TextContentAsync(), Is.EqualTo("Level 2 Button"));
+
+            await selectorsPage.InputLevel2.FillAsync("Hello from Level 2 Shadow DOM");
+            Assert.That(await selectorsPage.InputLevel2.InputValueAsync(), Is.EqualTo("Hello from Level 2 Shadow DOM"));
+
+            Assert.That(await selectorsPage.ButtonLevel3.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await selectorsPage.ButtonLevel3.GetAttributeAsync("id"), Is.EqualTo("shadow-btn-l3"));
+            Assert.That(await selectorsPage.ButtonLevel3.GetAttributeAsync("data-level"), Is.EqualTo("3"));
+            Assert.That(await selectorsPage.ButtonLevel3.GetAttributeAsync("data-id"), Is.EqualTo("shadow-l3-btn"));
+            Assert.That(await selectorsPage.ButtonLevel3.TextContentAsync(), Is.EqualTo("Level 3 Button"));
+
+            await selectorsPage.InputLevel3.FillAsync("Hello from Level 3 Shadow DOM");
+            Assert.That(await selectorsPage.InputLevel3.InputValueAsync(), Is.EqualTo("Hello from Level 3 Shadow DOM"));
+        }
     }
 }

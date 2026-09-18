@@ -28,5 +28,14 @@ namespace PlayWrightTests.PageObjects.UiTestingPlayground
         public ILocator HiddenOverflow => Page.Locator("#hidden-overflow");
         public ILocator HiddenZeroOpacity => Page.Locator("#hidden-opacity");
         public ILocator HiddenOffScreen => Page.Locator("#hidden-offscreen");
+
+        // Shadow DOM
+
+        public ILocator ButtonLevel1 => Page.Locator("#shadow-btn-l1");
+        public ILocator InputLevel1 => Page.Locator("#shadow-input-l1");
+        public ILocator ButtonLevel2 => Page.Locator("#shadow-btn-l2");
+        public ILocator InputLevel2 => Page.Locator("#shadow-input-l2");
+        public ILocator ButtonLevel3 => Page.Locator("#shadow-btn-l3");
+        public ILocator InputLevel3 => Page.Locator("#shadow-input-l3");
     }
 }
