@@ -19,5 +19,6 @@ namespace SeleniumTests.TestCases
         protected JsExecutor JsExecutor => new JsExecutor(selenium.Driver);
         protected ActionsHelper Action => new ActionsHelper(selenium.Driver);
         protected FrameHelper Frame => new FrameHelper(selenium.Driver);
+        protected AlertsHelper Alert => new AlertsHelper(selenium.Driver);
     }
 }
