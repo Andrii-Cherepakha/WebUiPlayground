@@ -30,6 +30,7 @@ namespace PlayWrightTests.PageObjects.UiTestingPlayground
         public ILocator HiddenOffScreen => Page.Locator("#hidden-offscreen");
 
         // Shadow DOM
+        // https://medium.com/helpshift-engineering/playwrights-playbook-conquering-shadowdom-elements-with-ease-35b65bfb8008
 
         public ILocator ButtonLevel1 => Page.Locator("#shadow-btn-l1");
         public ILocator InputLevel1 => Page.Locator("#shadow-input-l1");

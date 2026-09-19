@@ -138,5 +138,20 @@ namespace PlayWrightTests.TestCases.UiTestingPlayground
             Assert.That(await verifyTextPage.TextElementWelcomeByText.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("SPAN"));
             Assert.That(await verifyTextPage.TextElementWelcomeByText.InnerTextAsync(), Is.EqualTo("Welcome UserName!"));
         }
+
+        [Test]
+        public async Task ByTextNbsp()
+        {
+            homePage.OpenSectionAsync("Non-Breaking Space");
+
+            var nonBreakingSpacePage = GetPage<NonBreakingSpacePage>();
+
+            Assert.That(await nonBreakingSpacePage.BtnNbsp.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await nonBreakingSpacePage.BtnNbsp.InnerTextAsync(), Is.EqualTo("My Button")); // <-- &nbsp; special character in the text
+            Assert.That(await nonBreakingSpacePage.BtnNormalized.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await nonBreakingSpacePage.BtnNormalized.InnerTextAsync(), Is.EqualTo("My Button")); // <-- &nbsp; special character in the text
+            Assert.That(await nonBreakingSpacePage.BtnNbspByText.EvaluateAsync<string>("el => el.tagName"), Is.EqualTo("BUTTON"));
+            Assert.That(await nonBreakingSpacePage.BtnNbspByText.InnerTextAsync(), Is.EqualTo("My Button")); // <-- &nbsp; special character in the text
+        }
     }
 }
