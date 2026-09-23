@@ -102,7 +102,7 @@ In my opinion, Playwright’s approach is more convenient, as it helps avoid con
 
 ## Shadow DOM
 
-Selenium treats the Shadow DOM and its contents similarly to frames. You must first locate the host element and then call `GetShadowRoot()` on it. If a page contains multiple nested Shadow DOM elements, your code will sooner or later become spaghetti-like. In contrast, Playwright can recognize elements inside the Shadow DOM regardless of their nesting level. You can use regular locators for Shadow DOM elements just as you would for any other element on the page.
+Selenium treats the Shadow DOM and its contents similarly to frames. You must first locate the host element and then call `GetShadowRoot()` on it. If a page contains multiple nested Shadow DOM elements, your [code](https://github.com/Andrii-Cherepakha/WebUiPlayground/blob/main/SeleniumTests/PageObjects/SelectorsPage.cs#L33) will sooner or later become spaghetti-like. In contrast, Playwright can recognize elements inside the Shadow DOM regardless of their nesting level. You can use regular locators for Shadow DOM elements just as you would for any other element on the page.
 
 ## Alert Confirm Prompt dialogs
 
